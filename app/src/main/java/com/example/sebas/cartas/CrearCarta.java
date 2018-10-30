@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,5 +83,25 @@ public class CrearCarta extends AppCompatActivity {
             }
         });
 
+        setupToolBar();
+    }
+
+    private void setupToolBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar5);
+
+        if (toolbar == null) return;
+
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // close this activity as oppose to navigating up
+
+        return false;
     }
 }

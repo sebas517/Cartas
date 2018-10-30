@@ -2,6 +2,8 @@ package com.example.sebas.cartas;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,12 +19,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Adaptador adaptador;
-    private List<Carta> cartas = new ArrayList<>();
+    public List<Carta> cartas = new ArrayList<>();
     private final int REQUEST_CODE = 0;
 
     @Override
@@ -51,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        crearRecicler();
+
+
+    }
+
+    private void crearRecicler(){
         Adaptador.OnItemClickListener oyente = new Adaptador.OnItemClickListener() {
             @Override
             public void onClick(Adaptador.ViewHolder holder, int id) {
@@ -63,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         };
-
         RecyclerView rv = findViewById(R.id.reciclerView);
         adaptador = new Adaptador(oyente, cartas);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -143,5 +151,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle estado) {
+        if (cartas.size() > 0){
+            System.out.println("guardamos ------ " + cartas.toString());
+            estado.putSerializable("cartas", (Serializable) cartas);
+            adaptador.notifyDataSetChanged();
+        }
+        super.onSaveInstanceState(estado);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle guardado) {
+        if (guardado != null){
+            cartas = (List<Carta>) guardado.getSerializable("cartas");
+            crearRecicler();
+            adaptador.notifyDataSetChanged();
+        }
+        super.onRestoreInstanceState(guardado);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        crearRecicler();
+        adaptador.notifyDataSetChanged();
     }
 }
