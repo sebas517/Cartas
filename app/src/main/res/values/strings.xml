@@ -10,4 +10,5 @@
     <string name="peso">Peso</string>
     <string name="longitud">Longitud</string>
     <string name="velocidad">Velocidad</string>
+    <string name="nombre">Nombre</string>
 </resources>

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 public class CrearCarta extends AppCompatActivity {
@@ -20,50 +20,44 @@ public class CrearCarta extends AppCompatActivity {
     private int longitud;
     private int velocidad;
     private int imagen;
+    private ImageView image;
+    private TextInputLayout etNombre;
     private TextInputLayout etAltura;
     private TextInputLayout etPeso;
     private TextInputLayout etLongitud;
     private TextInputLayout etVelocidad;
     private Carta carta;
+    private int c;
+    private int id = R.drawable.animal0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_carta);
-        Spinner spinner = findViewById(R.id.spinner);
         etAltura = findViewById(R.id.etAlt);
         etPeso = findViewById(R.id.etPeso);
         etLongitud = findViewById(R.id.etLong);
         etVelocidad = findViewById(R.id.etVel);
+        etNombre = findViewById(R.id.etNombre);
+        image = findViewById(R.id.imageView2);
+        image.setImageResource(id);
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, animales));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        c =0;
 
+        Button btSiguiente = findViewById(R.id.btSiguiente);
+        btSiguiente.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                adapterView.getItemAtPosition(pos);
-                if ("Hipopótamo".equals(adapterView.getItemAtPosition(pos))){
-                    nombre = (String) adapterView.getItemAtPosition(pos);
-                    imagen = R.drawable.hipo;
+            public void onClick(View v) {
+                if (c==2){
+                    c=-1;
                 }
-                if ("Cebra".equals(adapterView.getItemAtPosition(pos))){
-                    nombre = (String) adapterView.getItemAtPosition(pos);
-                    imagen = R.drawable.cebra;
-                }
-                if ("León".equals(adapterView.getItemAtPosition(pos))){
-                    nombre = (String) adapterView.getItemAtPosition(pos);
-                    imagen = R.drawable.leon;
-                }
-                if ("Tigre".equals(adapterView.getItemAtPosition(pos))){
-                    nombre = (String) adapterView.getItemAtPosition(pos);
-                    imagen = R.drawable.leon;
-                }
+                c++;
+                String nombre = "animal"+c;
+                id =  CrearCarta.this.getResources().getIdentifier(nombre, "drawable", CrearCarta.this.getPackageName());
+                image.setImageResource(id);
+                System.out.println("idImagen " + id);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {    }
         });
 
         Button bt = findViewById(R.id.btAgregar);
@@ -74,6 +68,8 @@ public class CrearCarta extends AppCompatActivity {
                 peso = Integer.parseInt(etPeso.getEditText().getText().toString());
                 longitud = Integer.parseInt(etLongitud.getEditText().getText().toString());
                 velocidad = Integer.parseInt(etVelocidad.getEditText().getText().toString());
+                nombre = etNombre.getEditText().getText().toString();
+                imagen = id;
 
                 carta = new Carta(nombre, altura, peso, longitud, velocidad, imagen);
                 Intent i = getIntent();
