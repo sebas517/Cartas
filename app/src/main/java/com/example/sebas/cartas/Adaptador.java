@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
@@ -40,7 +42,8 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
         viewHolder.tvPeso.setText(String.valueOf(carta.getPeso()));
         viewHolder.tvLongitud.setText(String.valueOf(carta.getLongitud()));
         viewHolder.tvVelocidad.setText(String.valueOf(carta.getVelocidad()));
-        viewHolder.img.setImageResource(carta.getImagen());
+        Picasso.with(viewHolder.itemView.getContext()).load(carta.getImagen()).into(viewHolder.img);
+
 
 
     }

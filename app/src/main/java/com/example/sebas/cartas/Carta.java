@@ -1,5 +1,6 @@
 package com.example.sebas.cartas;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,9 +10,9 @@ public class Carta implements Parcelable {
     private int peso;
     private int longitud;
     private int velocidad;
-    private int imagen;
+    private Uri imagen;
 
-    public Carta(String nombre, int altura, int peso, int longitud, int velocidad, int imagen) {
+    public Carta(String nombre, int altura, int peso, int longitud, int velocidad, Uri imagen) {
         this.nombre = nombre;
         this.altura = altura;
         this.peso = peso;
@@ -26,7 +27,7 @@ public class Carta implements Parcelable {
         peso = in.readInt();
         longitud = in.readInt();
         velocidad = in.readInt();
-        imagen = in.readInt();
+        imagen = (Uri) in.readValue(Uri.class.getClassLoader());
     }
 
     public static final Creator<Carta> CREATOR = new Creator<Carta>() {
@@ -93,11 +94,11 @@ public class Carta implements Parcelable {
         this.velocidad = velocidad;
     }
 
-    public int getImagen() {
+    public Uri getImagen() {
         return imagen;
     }
 
-    public void setImagen(int imagen) {
+    public void setImagen(Uri imagen) {
         this.imagen = imagen;
     }
 
@@ -113,7 +114,7 @@ public class Carta implements Parcelable {
         parcel.writeInt(peso);
         parcel.writeInt(longitud);
         parcel.writeInt(velocidad);
-        parcel.writeInt(imagen);
+        parcel.writeValue(imagen);
 
     }
 }

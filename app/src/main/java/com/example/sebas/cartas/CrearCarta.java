@@ -1,6 +1,9 @@
 package com.example.sebas.cartas;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -29,6 +33,9 @@ public class CrearCarta extends AppCompatActivity {
     private Carta carta;
     private int c;
     private int id = R.drawable.animal0;
+    private final int READ_REQUEST_CODE = 0;
+    private Uri imageUri;
+
 
 
     @Override
@@ -45,20 +52,7 @@ public class CrearCarta extends AppCompatActivity {
 
         c =0;
 
-        Button btSiguiente = findViewById(R.id.btSiguiente);
-        btSiguiente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (c==2){
-                    c=-1;
-                }
-                c++;
-                String nombre = "animal"+c;
-                id =  CrearCarta.this.getResources().getIdentifier(nombre, "drawable", CrearCarta.this.getPackageName());
-                image.setImageResource(id);
-                System.out.println("idImagen " + id);
-            }
-        });
+
 
         Button bt = findViewById(R.id.btAgregar);
         bt.setOnClickListener(new View.OnClickListener() {
@@ -69,13 +63,26 @@ public class CrearCarta extends AppCompatActivity {
                 longitud = Integer.parseInt(etLongitud.getEditText().getText().toString());
                 velocidad = Integer.parseInt(etVelocidad.getEditText().getText().toString());
                 nombre = etNombre.getEditText().getText().toString();
-                imagen = id;
+                //imagen = imageUri;
 
-                carta = new Carta(nombre, altura, peso, longitud, velocidad, imagen);
+                carta = new Carta(nombre, altura, peso, longitud, velocidad, imageUri);
                 Intent i = getIntent();
                 i.putExtra("nuevaCarta", carta);
                 setResult(RESULT_OK, i);
                 finish();
+            }
+        });
+
+        ImageButton btGaleria = findViewById(R.id.btGaleria);
+        btGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gallery = new Intent(Intent.ACTION_GET_CONTENT);
+                gallery.setType("image/*");
+                if (gallery.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(gallery, READ_REQUEST_CODE);
+                }
+
             }
         });
 
@@ -99,5 +106,14 @@ public class CrearCarta extends AppCompatActivity {
         finish(); // close this activity as oppose to navigating up
 
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == READ_REQUEST_CODE){
+            imageUri = data.getData();
+            image.setImageURI(imageUri);
+        }
     }
 }

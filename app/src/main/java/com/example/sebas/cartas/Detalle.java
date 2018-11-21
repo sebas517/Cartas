@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class Detalle extends AppCompatActivity {
     private TextView tvNombre;
     private TextView tvAltura;
@@ -37,7 +39,8 @@ public class Detalle extends AppCompatActivity {
         tvPeso.setText(String.valueOf(c.getPeso()));
         tvLongitud.setText(String.valueOf(c.getLongitud()));
         tvVelocidad.setText(String.valueOf(c.getVelocidad()));
-        img.setImageResource(c.getImagen());
+        Picasso.with(this).load(c.getImagen()).into(img);
+
 
 
 
